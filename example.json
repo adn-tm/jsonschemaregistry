@@ -1,0 +1,1631 @@
+{
+    "type": "object",
+    "properties": {
+        "templateId": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "/ClinicalDocument/templateId/@root",
+            "title": "Уникальный идентификатор руководства по реализации СЭМД",
+            "decode": "1.2.643.5.1.13.13.99.2.638"
+        },
+        "title": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "/ClinicalDocument/title/text()",
+            "title": "Заголовок документа",
+            "decode": null
+        },
+        "effectiveTime": {
+            "type": "string",
+            "xml_type": "TS",
+            "xpath": "/ClinicalDocument/effectiveTime/@value",
+            "title": "Дата создания документа",
+            "decode": null
+        },
+        "confidentialityCode": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "/ClinicalDocument/confidentialityCode/@code",
+            "title": "Уровень конфиденциальности документа",
+            "decode": "1.2.643.5.1.13.13.99.2.285"
+        },
+        "docId": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "/ClinicalDocument/id/@extension",
+            "title": "Уникальный идентификатор документа",
+            "decode": null
+        },
+        "setId": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "/ClinicalDocument/setId/@extension",
+            "title": "Уникальный идентификатор набора версий документа",
+            "decode": null
+        },
+        "versionNumber": {
+            "type": "number",
+            "xml_type": "INT",
+            "xpath": "/ClinicalDocument/versionNumber/@value",
+            "title": "Номер версии документа",
+            "decode": null
+        },
+        "patientId": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//patientRole/id[1]/@extension",
+            "title": "Уникальный идентификатор пациента в МИС",
+            "decode": null
+        },
+        "patientSNILS": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//patientRole/id[2]/@extension",
+            "title": "СНИЛС пациента",
+            "decode": null
+        },
+        "patientCardType": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//patientRole/identity:IdentityDoc/identity:IdentityCardType/@code",
+            "title": "Тип ДУЛ пациента",
+            "decode": "1.2.643.5.1.13.13.99.2.48"
+        },
+        "patientCardSeries": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/identity:IdentityDoc/identity:Series/text()",
+            "title": "Серия ДУЛ пациента",
+            "decode": null
+        },
+        "patientCardNumber": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/identity:IdentityDoc/identity:Number/text()",
+            "title": "Номер ДУЛ пациента",
+            "decode": null
+        },
+        "patientCardIssueOrgName": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/identity:IdentityDoc/identity:IssueOrgName/text()",
+            "title": "Сведения о том, кем выдан ДУЛ пациента",
+            "decode": null
+        },
+        "patientCardIssueOrgCode": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/identity:IdentityDoc/identity:IssueOrgCode/text()",
+            "title": "Сведения о том, кем выдан ДУЛ пациента (код подразделения)",
+            "decode": null
+        },
+        "patientCardIssueDate": {
+            "type": "string",
+            "xml_type": "TS",
+            "xpath": "//patientRole/identity:IdentityDoc/identity:IssueDate/@value",
+            "title": "Дата выдачи ДУЛ пациента",
+            "decode": null
+        },
+        "patientFamily": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/patient/name/family/text()",
+            "title": "Фамилия пациента",
+            "decode": null
+        },
+        "patientName": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/patient/name/given/text()",
+            "title": "Имя пациента",
+            "decode": null
+        },
+        "patientPatronymic": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/patient/name/identity:Patronymic/text()",
+            "title": "Отчество пациента",
+            "decode": null
+        },
+        "patientGender": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//patientRole/patient/administrativeGenderCode/@code",
+            "title": "Пол пациента",
+            "decode": "1.2.643.5.1.13.13.11.1040"
+        },
+        "patientBirthday": {
+            "type": "string",
+            "xml_type": "TS",
+            "xpath": "//patientRole/patient/birthTime/@value",
+            "title": "Дата рождения пациента",
+            "decode": null
+        },
+        "addrText_1504_1": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/addr[address:Type/@code=\"1\"]/streetAddressLine/text()",
+            "title": "Адрес (текстом) [Адрес по месту жительства (постоянной регистрации)]",
+            "decode": null
+        },
+        "addrStateCode_1504_1": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//patientRole/addr[address:Type/@code=\"1\"]/address:stateCode/@code",
+            "title": "Код субъекта РФ [Адрес по месту жительства (постоянной регистрации)]",
+            "decode": "1.2.643.5.1.13.13.99.2.206"
+        },
+        "addrResidentCode_1504_1": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//patientRole/addr[address:Type/@code=\"1\"]/address:residentCode/@code",
+            "title": "Вид места жительства [Адрес по месту жительства (постоянной регистрации)]",
+            "decode": "1.2.643.5.1.13.13.11.1042"
+        },
+        "addrPostalCode_1504_1": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/addr[address:Type/@code=\"1\"]/postalCode/text()",
+            "title": "Почтовый индекс [Адрес по месту жительства (постоянной регистрации)]",
+            "decode": null
+        },
+        "addrAOGUID_1504_1": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/addr[address:Type/@code=\"1\"]/fias:Address/fias:AOGUID/text()",
+            "title": "ГУИ адресного объекта по ФИАС [Адрес по месту жительства (постоянной регистрации)]",
+            "decode": null
+        },
+        "addrHOUSEGUID_1504_1": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/addr[address:Type/@code=\"1\"]/fias:Address/fias:HOUSEGUID/text()",
+            "title": "ГУИ дома по ФИАС [Адрес по месту жительства (постоянной регистрации)]",
+            "decode": null
+        },
+        "addrText_1504_2": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/addr[address:Type/@code=\"2\"]/streetAddressLine/text()",
+            "title": "Адрес (текстом) [Адрес по месту пребывания (временной регистрации)]",
+            "decode": null
+        },
+        "addrStateCode_1504_2": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//patientRole/addr[address:Type/@code=\"2\"]/address:stateCode/@code",
+            "title": "Код субъекта РФ [Адрес по месту пребывания (временной регистрации)]",
+            "decode": "1.2.643.5.1.13.13.99.2.206"
+        },
+        "addrResidentCode_1504_2": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//patientRole/addr[address:Type/@code=\"2\"]/address:residentCode/@code",
+            "title": "Вид места жительства [Адрес по месту пребывания (временной регистрации)]",
+            "decode": "1.2.643.5.1.13.13.11.1042"
+        },
+        "addrPostalCode_1504_2": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/addr[address:Type/@code=\"2\"]/postalCode/text()",
+            "title": "Почтовый индекс [Адрес по месту пребывания (временной регистрации)]",
+            "decode": null
+        },
+        "addrAOGUID_1504_2": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/addr[address:Type/@code=\"2\"]/fias:Address/fias:AOGUID/text()",
+            "title": "ГУИ адресного объекта по ФИАС [Адрес по месту пребывания (временной регистрации)]",
+            "decode": null
+        },
+        "addrHOUSEGUID_1504_2": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/addr[address:Type/@code=\"2\"]/fias:Address/fias:HOUSEGUID/text()",
+            "title": "ГУИ дома по ФИАС [Адрес по месту пребывания (временной регистрации)]",
+            "decode": null
+        },
+        "addrText_1504_3": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/addr[address:Type/@code=\"3\"]/streetAddressLine/text()",
+            "title": "Адрес (текстом) [Адрес фактического проживания (пребывания)]",
+            "decode": null
+        },
+        "addrStateCode_1504_3": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//patientRole/addr[address:Type/@code=\"3\"]/address:stateCode/@code",
+            "title": "Код субъекта РФ [Адрес фактического проживания (пребывания)]",
+            "decode": "1.2.643.5.1.13.13.99.2.206"
+        },
+        "addrResidentCode_1504_3": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//patientRole/addr[address:Type/@code=\"3\"]/address:residentCode/@code",
+            "title": "Вид места жительства [Адрес фактического проживания (пребывания)]",
+            "decode": "1.2.643.5.1.13.13.11.1042"
+        },
+        "addrPostalCode_1504_3": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/addr[address:Type/@code=\"3\"]/postalCode/text()",
+            "title": "Почтовый индекс [Адрес фактического проживания (пребывания)]",
+            "decode": null
+        },
+        "addrAOGUID_1504_3": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/addr[address:Type/@code=\"3\"]/fias:Address/fias:AOGUID/text()",
+            "title": "ГУИ адресного объекта по ФИАС [Адрес фактического проживания (пребывания)]",
+            "decode": null
+        },
+        "addrHOUSEGUID_1504_3": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/addr[address:Type/@code=\"3\"]/fias:Address/fias:HOUSEGUID/text()",
+            "title": "ГУИ дома по ФИАС [Адрес фактического проживания (пребывания)]",
+            "decode": null
+        },
+        "addrText_1504_4": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/addr[address:Type/@code=\"4\"]/streetAddressLine/text()",
+            "title": "Адрес (текстом) [Адрес места учебы/работы]",
+            "decode": null
+        },
+        "addrStateCode_1504_4": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//patientRole/addr[address:Type/@code=\"4\"]/address:stateCode/@code",
+            "title": "Код субъекта РФ [Адрес места учебы/работы]",
+            "decode": "1.2.643.5.1.13.13.99.2.206"
+        },
+        "addrResidentCode_1504_4": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//patientRole/addr[address:Type/@code=\"4\"]/address:residentCode/@code",
+            "title": "Вид места жительства [Адрес места учебы/работы]",
+            "decode": "1.2.643.5.1.13.13.11.1042"
+        },
+        "addrPostalCode_1504_4": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/addr[address:Type/@code=\"4\"]/postalCode/text()",
+            "title": "Почтовый индекс [Адрес места учебы/работы]",
+            "decode": null
+        },
+        "addrAOGUID_1504_4": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/addr[address:Type/@code=\"4\"]/fias:Address/fias:AOGUID/text()",
+            "title": "ГУИ адресного объекта по ФИАС [Адрес места учебы/работы]",
+            "decode": null
+        },
+        "addrHOUSEGUID_1504_4": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//patientRole/addr[address:Type/@code=\"4\"]/fias:Address/fias:HOUSEGUID/text()",
+            "title": "ГУИ дома по ФИАС [Адрес места учебы/работы]",
+            "decode": null
+        },
+        "guardianSNILS": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//guardian/id/@extension",
+            "title": "СНИЛС представителя",
+            "decode": null
+        },
+        "guardianCardType": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//guardian/identity:IdentityDoc/identity:IdentityCardType/@code",
+            "title": "Тип ДУЛ представителя",
+            "decode": "1.2.643.5.1.13.13.99.2.48"
+        },
+        "guardianCardSeries": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardian/identity:IdentityDoc/identity:Series/text()",
+            "title": "Серия ДУЛ представителя",
+            "decode": null
+        },
+        "guardianCardNumber": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardian/identity:IdentityDoc/identity:Number/text()",
+            "title": "Номер ДУЛ представителя",
+            "decode": null
+        },
+        "guardianCardIssueOrgName": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardian/identity:IdentityDoc/identity:IssueOrgName/text()",
+            "title": "Сведения о том, кем выдан ДУЛ представителя",
+            "decode": null
+        },
+        "guardianCardIssueOrgCode": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardian/identity:IdentityDoc/identity:IssueOrgCode/text()",
+            "title": "Сведения о том, кем выдан ДУЛ представителя (код подразделения)",
+            "decode": null
+        },
+        "guardianCardIssueDate": {
+            "type": "string",
+            "xml_type": "TS",
+            "xpath": "//guardian/identity:IdentityDoc/identity:IssueDate/@value",
+            "title": "Дата выдачи ДУЛ представителя",
+            "decode": null
+        },
+        "guardianAuthorityDocType": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//guardian/identity:AuthorityDoc/identity:IdentityCardType/@code",
+            "title": "Тип документа, удостоверяющего полномочия представителя",
+            "decode": "1.2.643.5.1.13.13.99.2.313"
+        },
+        "guardianAuthorityDocSeries": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardian/identity:AuthorityDoc/identity:Series/text()",
+            "title": "Серия документа, удостоверяющего полномочия представителя",
+            "decode": null
+        },
+        "guardianAuthorityDocNumber": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardian/identity:AuthorityDoc/identity:Number/text()",
+            "title": "Номер документа, удостоверяющего полномочия представителя",
+            "decode": null
+        },
+        "guardianAuthorityDocIssueOrgName": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardian/identity:AuthorityDoc/identity:IssueOrgName/text()",
+            "title": "Сведения о том, кем выдан документ, удостоверяющий полномочия представителя",
+            "decode": null
+        },
+        "guardianAuthorityDocIssueDate": {
+            "type": "string",
+            "xml_type": "TS",
+            "xpath": "//guardian/identity:AuthorityDoc/identity:IssueDate/@value",
+            "title": "Дата выдачи документа, удостоверяющего полномочия представителя",
+            "decode": null
+        },
+        "guardianRelationshipType": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//guardian/code/@code",
+            "title": "Тип связи между представителем и пациентом",
+            "decode": "1.2.643.5.1.13.13.99.2.14"
+        },
+        "guardianAddressText": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardian/addr/streetAddressLine/text()",
+            "title": "Адрес фактического места жительства представителя (текстом)",
+            "decode": null
+        },
+        "guardianStateCode": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//guardian/addr/address:stateCode/@code",
+            "title": "Код субъекта РФ, где проживает представитель",
+            "decode": "1.2.643.5.1.13.13.99.2.206"
+        },
+        "guardianPostalCode": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardian/addr/postalCode/text()",
+            "title": "Почтовый индекс представителя",
+            "decode": null
+        },
+        "guardianAOGUID": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardian/addr/fias:Address/fias:AOGUID/text()",
+            "title": "Глобальный уникальный идентификатор адресного объекта представителя по ФИАС",
+            "decode": null
+        },
+        "guardianHOUSEGUID": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardian/addr/fias:Address/fias:HOUSEGUID/text()",
+            "title": "Глобальный уникальный идентификатор дома представителя по ФИАС",
+            "decode": null
+        },
+        "guardianFamily": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardian/guardianPerson/name/family/text()",
+            "title": "Фамилия представителя",
+            "decode": null
+        },
+        "guardianName": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardian/guardianPerson/name/given/text()",
+            "title": "Имя представителя",
+            "decode": null
+        },
+        "guardianPatronymic": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardian/guardianPerson/name/identity:Patronymic/text()",
+            "title": "Отчество представителя",
+            "decode": null
+        },
+        "guardianOrgId": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//guardianOrganization/id/@root",
+            "title": "Уникальный идентификатор представителя (юр.лица)",
+            "decode": "1.2.643.5.1.13.13.11.1461"
+        },
+        "guardianOrgUnitId": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//guardianOrganization/id/@extension",
+            "title": "Уникальный идентификатор структ. подразд. представителя (юр.лица)",
+            "decode": "1.2.643.5.1.13.13.99.2.114"
+        },
+        "guardianOrgOGRN": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardianOrganization/identity:Props/identity:Ogrn/text()",
+            "title": "ОГРН представителя (юр.лица)",
+            "decode": null
+        },
+        "guardianOrgOGRNIP": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardianOrganization/identity:Props/identity:Ogrnip/text()",
+            "title": "ОГРНИП представителя (юр.лица)",
+            "decode": null
+        },
+        "guardianOrgOKPO": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardianOrganization/identity:Props/identity:Okpo/text()",
+            "title": "ОКПО представителя (юр.лица)",
+            "decode": null
+        },
+        "guardianOrgOKATO": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardian/guardianOrganization/identity:Props/identity:Okato/text()",
+            "title": "ОКАТО представителя (юр.лица)",
+            "decode": null
+        },
+        "guardianOrgName": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardianOrganization/name/text()",
+            "title": "Наименование представителя (юр.лица)",
+            "decode": null
+        },
+        "guardianOrgAddressText": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardianOrganization/addr/streetAddressLine/text()",
+            "title": "Адрес представителя (юр.лица) (текстом)",
+            "decode": null
+        },
+        "guardianOrgStateCode": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//guardianOrganization/addr/address:stateCode/@code",
+            "title": "Код субъекта РФ представителя (юр.лица)",
+            "decode": "1.2.643.5.1.13.13.99.2.206"
+        },
+        "guardianOrgPostalCode": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardianOrganization/addr/postalCode/text()",
+            "title": "Почтовый индекс представителя (юр.лица)",
+            "decode": null
+        },
+        "guardianOrgAOGUID": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardianOrganization/addr/fias:Address/fias:AOGUID/text()",
+            "title": "Глобальный уникальный идентификатор адресного объекта представителя (юр.лица) по ФИАС",
+            "decode": null
+        },
+        "guardianOrgHOUSEGUID": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//guardianOrganization/addr/fias:Address/fias:HOUSEGUID/text()",
+            "title": "Глобальный уникальный идентификатор дома представителя (юр.лица) по ФИАС",
+            "decode": null
+        },
+        "providerOrganization_Id": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//providerOrganization/id[1]/@root",
+            "title": "Уникальный идентификатор МО, оказавшей медицинскую помощь",
+            "decode": "1.2.643.5.1.13.13.11.1461"
+        },
+        "providerOrganization_UnitId": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//providerOrganization/id[1]/@extension",
+            "title": "Уникальный идентификатор структ. подразд. МО, оказавшей медицинскую помощь",
+            "decode": "1.2.643.5.1.13.13.99.2.114"
+        },
+        "providerOrganization_LicenseNumber": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//providerOrganization/id[2]/@extension",
+            "title": "Номер лицензии на осуществление медицинской деятельности",
+            "decode": null
+        },
+        "providerOrganization_LicenseAuthorityInfo": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//providerOrganization/id[2]/@assigningAuthorityName",
+            "title": "Наименование выдавшего лицензию органа и дата регистрации",
+            "decode": null
+        },
+        "providerOrganization_Name": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//providerOrganization/name/text()",
+            "title": "Наименование МО, оказавшей медицинскую помощь",
+            "decode": null
+        },
+        "authorId": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//assignedAuthor/id[1]/@extension",
+            "title": "Уникальный идентификатор автора в МИС",
+            "decode": null
+        },
+        "authorSNILS": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//assignedAuthor/id[2]/@extension",
+            "title": "СНИЛС автора документа",
+            "decode": null
+        },
+        "authorCode": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//assignedAuthor/code/@code",
+            "title": "Код должности автора документа",
+            "decode": "1.2.643.5.1.13.13.11.1002"
+        },
+        "authorFamily": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//assignedAuthor/assignedPerson/name/family/text()",
+            "title": "Фамилия автора документа",
+            "decode": null
+        },
+        "authorName": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//assignedAuthor/assignedPerson/name/given/text()",
+            "title": "Имя автора документа",
+            "decode": null
+        },
+        "authorPatronymic": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//assignedAuthor/assignedPerson/name/identity:Patronymic/text()",
+            "title": "Отчество автора документа",
+            "decode": null
+        },
+        "legalAuthId": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//legalAuthenticator/assignedEntity/id[1]/@extension",
+            "title": "Уникальный идентификатор заверителя в МИС",
+            "decode": null
+        },
+        "legalAuthSNILS": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//legalAuthenticator/assignedEntity/id[2]/@extension",
+            "title": "СНИЛС заверителя документа",
+            "decode": null
+        },
+        "legalAuthCode": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//legalAuthenticator/assignedEntity/code/@code",
+            "title": "Код должности заверителя документа",
+            "decode": "1.2.643.5.1.13.13.11.1002"
+        },
+        "legalAuthFamily": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//legalAuthenticator/assignedEntity/assignedPerson/name/family/text()",
+            "title": "Фамилия заверителя документа",
+            "decode": null
+        },
+        "legalAuthName": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//legalAuthenticator/assignedEntity/assignedPerson/name/given/text()",
+            "title": "Имя заверителя документа",
+            "decode": null
+        },
+        "legalAuthPatronymic": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//legalAuthenticator/assignedEntity/assignedPerson/name/identity:Patronymic/text()",
+            "title": "Отчество заверителя документа",
+            "decode": null
+        },
+        "paymentType": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//participant[@typeCode=\"IND\"]/associatedEntity/code/@code",
+            "title": "Тип источника оплаты",
+            "decode": "1.2.643.5.1.13.13.11.1039"
+        },
+        "paymentDocType": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//participant[@typeCode=\"IND\"]/associatedEntity/identity:DocInfo/identity:IdentityDocType/@code",
+            "title": "Тип документа-основания",
+            "decode": "1.2.643.5.1.13.13.99.2.724"
+        },
+        "paymentPolicyType": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//participant[@typeCode=\"IND\"]/associatedEntity/identity:DocInfo/identity:InsurancePolicyType/@code",
+            "title": "Вид полиса ОМС",
+            "decode": "1.2.643.5.1.13.13.11.1035"
+        },
+        "paymentDocSeries": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//participant[@typeCode=\"IND\"]/associatedEntity/identity:DocInfo/identity:Series/text()",
+            "title": "Серия документа-основания",
+            "decode": null
+        },
+        "paymentDocNumber": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//participant[@typeCode=\"IND\"]/associatedEntity/identity:DocInfo/identity:Number/text()",
+            "title": "Номер документа-основания",
+            "decode": null
+        },
+        "paymentINN": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//participant[@typeCode=\"IND\"]/associatedEntity/identity:DocInfo/identity:INN/text()",
+            "title": "ИНН организации или физического лица",
+            "decode": null
+        },
+        "paymentDocStartDate": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//participant[@typeCode=\"IND\"]/associatedEntity/identity:DocInfo/identity:effectiveTime/identity:low/@value",
+            "title": "Дата начала действия документа-основания",
+            "decode": null
+        },
+        "paymentDocEndDate": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//participant[@typeCode=\"IND\"]/associatedEntity/identity:DocInfo/identity:effectiveTime/identity:high/@value",
+            "title": "Дата окончания действия документа-основания",
+            "decode": null
+        },
+        "paymentOrganizationId": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//participant[@typeCode=\"IND\"]/associatedEntity/scopingOrganization/id/@extension",
+            "title": "Уникальный идентификатор страховой компании",
+            "decode": "1.2.643.5.1.13.13.99.2.183"
+        },
+        "paymentOrganizationName": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//participant[@typeCode=\"IND\"]/associatedEntity/scopingOrganization/name/text()",
+            "title": "Наименование страховой компании",
+            "decode": null
+        },
+        "paymentOrganization_AddressStateCode": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//participant[@typeCode=\"IND\"]/associatedEntity/scopingOrganization/addr/address:stateCode/@code",
+            "title": "Код субъекта РФ страховой компании",
+            "decode": "1.2.643.5.1.13.13.99.2.206"
+        },
+        "senderId": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//participant[@typeCode=\"REF\"]/associatedEntity/id[1]/@extension",
+            "title": "Уникальный идентификатор направителя в МИС",
+            "decode": null
+        },
+        "senderSNILS": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//participant[@typeCode=\"REF\"]/associatedEntity/id[2]/@extension",
+            "title": "СНИЛС направителя",
+            "decode": null
+        },
+        "senderCode": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//participant[@typeCode=\"REF\"]/associatedEntity/code/@code",
+            "title": "Код должности направителя",
+            "decode": "1.2.643.5.1.13.13.11.1002"
+        },
+        "senderFamily": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//participant[@typeCode=\"REF\"]/associatedEntity/associatedPerson/name/family/text()",
+            "title": "Фамилия направителя",
+            "decode": null
+        },
+        "senderName": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//participant[@typeCode=\"REF\"]/associatedEntity/associatedPerson/name/given/text()",
+            "title": "Имя направителя",
+            "decode": null
+        },
+        "senderPatronymic": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//participant[@typeCode=\"REF\"]/associatedEntity/associatedPerson/name/identity:Patronymic/text()",
+            "title": "Отчество направителя",
+            "decode": null
+        },
+        "senderOrganization_Id": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//participant[@typeCode=\"REF\"]/associatedEntity/scopingOrganization/id/@root",
+            "title": "Уникальный идентификатор направившей МО",
+            "decode": "1.2.643.5.1.13.13.11.1461"
+        },
+        "senderOrganization_UnitId": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//participant[@typeCode=\"REF\"]/associatedEntity/scopingOrganization/id/@extension",
+            "title": "Уникальный идентификатор структ. подразд. направившей МО",
+            "decode": "1.2.643.5.1.13.13.99.2.114"
+        },
+        "senderOrganization_Name": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//participant[@typeCode=\"REF\"]/associatedEntity/scopingOrganization/name/text()",
+            "title": "Наименование направившей МО",
+            "decode": null
+        },
+        "referralId": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//inFulfillmentOf/order/id/@extension",
+            "title": "Уникальный идентификатор направления в МИС",
+            "decode": null
+        },
+        "referralCode": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//inFulfillmentOf/order/code/@code",
+            "title": "Вид медицинского направления",
+            "decode": "1.2.643.5.1.13.13.11.1522"
+        },
+        "eventCode": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//documentationOf/serviceEvent/code/@code",
+            "title": "Тип документируемого события",
+            "decode": "1.2.643.5.1.13.13.99.2.726"
+        },
+        "eventStartDate": {
+            "type": "string",
+            "xml_type": "TS",
+            "xpath": "//documentationOf/serviceEvent/effectiveTime/low/@value",
+            "title": "Дата и время поступления в приемное отделение",
+            "decode": null
+        },
+        "eventEndDate": {
+            "type": "string",
+            "xml_type": "TS",
+            "xpath": "//documentationOf/serviceEvent/effectiveTime/high/@value",
+            "title": "Дата и время выписки",
+            "decode": null
+        },
+        "eventForm": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//documentationOf/serviceEvent/medService:serviceForm/@code",
+            "title": "Форма оказания медицинской помощи",
+            "decode": "1.2.643.5.1.13.13.11.1551"
+        },
+        "eventType": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//documentationOf/serviceEvent/medService:serviceType/@code",
+            "title": "Вид медицинской помощи",
+            "decode": "1.2.643.5.1.13.13.11.1034"
+        },
+        "eventCondition": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//documentationOf/serviceEvent/medService:serviceCond/@code",
+            "title": "Условия оказания медицинской помощи",
+            "decode": "1.2.643.5.1.13.13.99.2.322"
+        },
+        "caseId": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//componentOf/encompassingEncounter/id[1]/@extension",
+            "title": "Уникальный идентификатор случая оказания медицинской помощи в МИС",
+            "decode": null
+        },
+        "MR_number": {
+            "type": "string",
+            "xml_type": "II",
+            "xpath": "//componentOf/encompassingEncounter/id[2]/@extension",
+            "title": "Уникальный идентификатор медицинской карты в МИС",
+            "decode": null
+        },
+        "MR_code": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//componentOf/encompassingEncounter/code/@code",
+            "title": "Тип медицинской карты",
+            "decode": "1.2.643.5.1.13.13.99.2.723"
+        },
+        "MR_type": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//componentOf/encompassingEncounter/medService:DocType/@code",
+            "title": "Вид медицинской карты",
+            "decode": "1.2.643.5.1.13.13.11.1522"
+        },
+        "caseStartDate": {
+            "type": "string",
+            "xml_type": "TS",
+            "xpath": "//componentOf/encompassingEncounter/effectiveTime/low/@value",
+            "title": "Дата начала случая",
+            "decode": null
+        },
+        "caseEndDate": {
+            "type": "string",
+            "xml_type": "TS",
+            "xpath": "//componentOf/encompassingEncounter/effectiveTime/high/@value",
+            "title": "Дата окончания случая",
+            "decode": null
+        },
+        "caseEndCode": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//componentOf/encompassingEncounter/dischargeDispositionCode/@code",
+            "title": "Исход госпитализации",
+            "decode": "1.2.643.5.1.13.13.11.1470"
+        },
+        "statCardType": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"11005\"]/following-sibling::value/@code",
+            "title": "Тип статистической карты выбывшего из стационара",
+            "decode": "1.2.643.5.1.13.13.99.2.971"
+        },
+        "socialStatus": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"12088\"]/following-sibling::value/@code",
+            "title": "Социальный статус",
+            "decode": "1.2.643.5.1.13.13.11.1038"
+        },
+        "soldierCategory": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"9051\"]/following-sibling::value/@code",
+            "title": "Код категории военнослужащего",
+            "decode": "1.2.643.5.1.13.13.99.2.950"
+        },
+        "pregnancyNumber": {
+            "type": "number",
+            "xml_type": "INT",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"12310\"]/following-sibling::value/@value",
+            "title": "Текущая беременность по счёту",
+            "decode": null
+        },
+        "benefitCategory": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"811\"]/following-sibling::value/@code",
+            "title": "Льготная категория",
+            "decode": "1.2.643.5.1.13.13.99.2.541"
+        },
+        "hospChannelCode": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.11.1496\"]/@code",
+            "title": "Код канала госпитализации",
+            "decode": "1.2.643.5.1.13.13.11.1496"
+        },
+        "ambulanceSquadNumber": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.11.1496\"]/following-sibling::text/text()",
+            "title": "Номер наряда скорой помощи",
+            "decode": null
+        },
+        "hospChannelText": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.11.1496\"]/following-sibling::value/text()",
+            "title": "Номер наряда скорой помощи",
+            "decode": null
+        },
+        "intoxicationType": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"12089\"]/following-sibling::value/@code",
+            "title": "Вид опьянения",
+            "decode": "1.2.643.5.1.13.13.99.2.390"
+        },
+        "hospCaseType": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"817\"]/following-sibling::value/@code",
+            "title": "Вид случая госпитализации или обращения (первично, повторно)",
+            "decode": "1.2.643.5.1.13.13.11.1007"
+        },
+        "timeBeforeHospitalization": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"9042\"]/following-sibling::value/@code",
+            "title": "Время доставки больного в стационар от начала заболевания (получения травмы)",
+            "decode": "1.2.643.5.1.13.13.99.2.408"
+        },
+        "traumaType": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"824\"]/following-sibling::value/@code",
+            "title": "Вид травмы",
+            "decode": "1.2.643.5.1.13.13.11.1036"
+        },
+        "hospDuration": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"9046\"]/following-sibling::value/text()",
+            "title": "Продолжительность госпитализации (койко-дней)",
+            "decode": null
+        },
+        "hospResult": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"818\"]/following-sibling::value/@code",
+            "title": "Результат госпитализации",
+            "decode": "1.2.643.5.1.13.13.11.1046"
+        },
+        "checkRW1": {
+            "type": "string",
+            "xml_type": "BL",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"9047\"]/following-sibling::value/@value",
+            "title": "Признак обследования на сифилис (RW 1)",
+            "decode": null
+        },
+        "checkAIDS2": {
+            "type": "string",
+            "xml_type": "BL",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"9048\"]/following-sibling::value/@value",
+            "title": "Признак обследования на ВИЧ-инфекцию (AIDS 2)",
+            "decode": null
+        },
+        "deathСause ": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"12440\"]/following-sibling::value/@code",
+            "title": "Основная причина смерти",
+            "decode": "1.2.643.5.1.13.13.11.1005"
+        },
+        "refDocDate": {
+            "type": "string",
+            "xml_type": "TS",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.197\" and @code=\"LINKDOCS\"]/following-sibling::entry/act/code[@codeSystem=\"1.2.643.5.1.13.13.11.1522\" and (@code=\"3\" or @code=\"346\" or @code=\"365\")]/following-sibling::effectiveTime/@value",
+            "title": "Дата выдачи направления",
+            "decode": null
+        },
+        "refDocNumber": {
+            "type": "string",
+            "xml_type": "ST",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.197\" and @code=\"LINKDOCS\"]/following-sibling::entry/act/code[@codeSystem=\"1.2.643.5.1.13.13.11.1522\" and (@code=\"3\" or @code=\"346\" or @code=\"365\")]/following-sibling::entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"11003\"]/following-sibling::value/text()",
+            "title": "Номер направления",
+            "decode": null
+        },
+        "disabilityDocOpenDate": {
+            "type": "string",
+            "xml_type": "TS",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"6052\"]/following-sibling::effectiveTime/low/@value",
+            "title": "Дата начала срока нетрудоспособности",
+            "decode": null
+        },
+        "disabilityDocCloseDate": {
+            "type": "string",
+            "xml_type": "TS",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"6052\"]/following-sibling::effectiveTime/high/@value",
+            "title": "Дата окончания срока нетрудоспособности",
+            "decode": null
+        },
+        "disabilityAge": {
+            "type": "number",
+            "xml_type": "INT",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"9049\"]/following-sibling::value/@value",
+            "title": "Возраст лица, ухаживающего за пациентом",
+            "decode": null
+        },
+        "disabilityGender": {
+            "type": "string",
+            "xml_type": "CD",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"9050\"]/following-sibling::value/@code",
+            "title": "Пол лица, ухаживающего за пациентом",
+            "decode": "1.2.643.5.1.13.13.11.1040"
+        },
+        "defects_966_1": {
+            "type": "boolean",
+            "xml_type": "CD",
+            "xpath": "boolean(//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"12439\"]/following-sibling::value[/@code=\"1\"]/@code)",
+            "title": "Дефекты догоспитального этапа: несвоевременность госпитализации",
+            "decode": "1.2.643.5.1.13.13.99.2.966"
+        },
+        "defects_966_2": {
+            "type": "boolean",
+            "xml_type": "CD",
+            "xpath": "boolean(//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"12439\"]/following-sibling::value[/@code=\"2\"]/@code)",
+            "title": "Дефекты догоспитального этапа: недостаточный объем клин.-диагн. обследования",
+            "decode": "1.2.643.5.1.13.13.99.2.966"
+        },
+        "defects_966_3": {
+            "type": "boolean",
+            "xml_type": "CD",
+            "xpath": "boolean(//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"12439\"]/following-sibling::value[/@code=\"3\"]/@code)",
+            "title": "Дефекты догоспитального этапа: неправильная тактика лечения",
+            "decode": "1.2.643.5.1.13.13.99.2.966"
+        },
+        "defects_966_4": {
+            "type": "boolean",
+            "xml_type": "CD",
+            "xpath": "boolean(//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"12439\"]/following-sibling::value[/@code=\"4\"]/@code)",
+            "title": "Дефекты догоспитального этапа: несовпадение диагноза",
+            "decode": "1.2.643.5.1.13.13.99.2.966"
+        },
+        "REFDGN": {
+            "type": "array",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.197\" and @code=\"REFDGN\"]/following-sibling::entry",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "typeCode": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "observation/code/@code",
+                        "title": "Диагноз направившего учреждения. Вид нозологической единицы диагноза",
+                        "decode": "1.2.643.5.1.13.13.11.1077"
+                    },
+                    "text": {
+                        "type": "string",
+                        "xml_type": "ST",
+                        "xpath": "observation/text/text()",
+                        "title": "Диагноз направившего учреждения. Клинический диагноз (текстом)",
+                        "decode": null
+                    },
+                    "code": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "observation/value/@code",
+                        "title": "Диагноз направившего учреждения. Код по МКБ-10",
+                        "decode": "1.2.643.5.1.13.13.11.1005"
+                    },
+                    "pregnancyTerm": {
+                        "type": "number",
+                        "xml_type": "INT",
+                        "xpath": "observation/code/following-sibling::entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"8004\"]/following-sibling::value/translation/@value",
+                        "title": "Диагноз направившего учреждения. Срок беременности. Значение",
+                        "decode": null
+                    },
+                    "pregnancyTermUnit": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "observation/code/following-sibling::entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"8004\"]/following-sibling::value/translation/@code",
+                        "title": "Диагноз направившего учреждения. Срок беременности. Единицы измерения (дни или недели)",
+                        "decode": "1.2.643.5.1.13.13.11.1358"
+                    }
+                }
+            }
+        },
+        "ERDGN": {
+            "type": "array",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.197\" and @code=\"ERDGN\"]/following-sibling::entry",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "typeCode": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "observation/code/@code",
+                        "title": "Диагноз приемного отделения. Вид нозологической единицы диагноза",
+                        "decode": "1.2.643.5.1.13.13.11.1077"
+                    },
+                    "text": {
+                        "type": "string",
+                        "xml_type": "ST",
+                        "xpath": "observation/text/text()",
+                        "title": "Диагноз приемного отделения. Клинический диагноз (текстом)",
+                        "decode": null
+                    },
+                    "code": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "observation/value/@code",
+                        "title": "Диагноз приемного отделения. Код по МКБ-10",
+                        "decode": "1.2.643.5.1.13.13.11.1005"
+                    },
+                    "pregnancyTerm": {
+                        "type": "number",
+                        "xml_type": "INT",
+                        "xpath": "observation/code/following-sibling::entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"8004\"]/following-sibling::value/translation/@value",
+                        "title": "Диагноз приемного отделения. Срок беременности. Значение",
+                        "decode": null
+                    },
+                    "pregnancyTermUnit": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "observation/code/following-sibling::entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"8004\"]/following-sibling::value/translation/@code",
+                        "title": "Диагноз приемного отделения. Срок беременности. Единицы измерения (дни или недели)",
+                        "decode": "1.2.643.5.1.13.13.11.1358"
+                    }
+                }
+            }
+        },
+        "DEPARTINFO": {
+            "type": "array",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.197\" and @code=\"DEPARTINFO\"]/following-sibling::entry",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "departStartDate": {
+                        "type": "string",
+                        "xml_type": "TS",
+                        "xpath": "encounter/effectiveTime/low/@value",
+                        "title": "Дата и время поступления в отделение",
+                        "decode": null
+                    },
+                    "departEndDate": {
+                        "type": "string",
+                        "xml_type": "TS",
+                        "xpath": "encounter/effectiveTime/high/@value",
+                        "title": "Дата и время выписки, перевода из отделения",
+                        "decode": null
+                    },
+                    "performerId": {
+                        "type": "string",
+                        "xml_type": "II",
+                        "xpath": "encounter/performer/assignedEntity/id[1]/@extension",
+                        "title": "Уникальный идентификатор лечащего врача в МИС",
+                        "decode": null
+                    },
+                    "performerSNILS": {
+                        "type": "string",
+                        "xml_type": "II",
+                        "xpath": "encounter/performer/assignedEntity/id[2]/@extension",
+                        "title": "СНИЛС лечащего врача",
+                        "decode": null
+                    },
+                    "performerCode": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "encounter/performer/assignedEntity/code/@code",
+                        "title": "Код должности лечащего врача",
+                        "decode": "1.2.643.5.1.13.13.11.1002"
+                    },
+                    "performerFamily": {
+                        "type": "string",
+                        "xml_type": "ST",
+                        "xpath": "encounter/performer/assignedEntity/assignedPerson/name/family/text()",
+                        "title": "Фамилия лечащего врача",
+                        "decode": null
+                    },
+                    "performerName": {
+                        "type": "string",
+                        "xml_type": "ST",
+                        "xpath": "encounter/performer/assignedEntity/assignedPerson/name/given/text()",
+                        "title": "Имя лечащего врача",
+                        "decode": null
+                    },
+                    "performerPatronymic": {
+                        "type": "string",
+                        "xml_type": "ST",
+                        "xpath": "encounter/performer/assignedEntity/assignedPerson/name/identity:Patronymic/text()",
+                        "title": "Отчество лечащего врача",
+                        "decode": null
+                    },
+                    "departCode": {
+                        "type": "string",
+                        "xml_type": "II",
+                        "xpath": "encounter/participant/participantRole/id/@root",
+                        "title": "Код отделения, где пребывал пациент",
+                        "decode": "1.2.643.5.1.13.13.99.2.114"
+                    },
+                    "departBedType": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "encounter/entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"6024\"]/following-sibling::value/@code",
+                        "title": "Профиль койки",
+                        "decode": "1.2.643.5.1.13.13.11.1069"
+                    },
+                    "departDiagnosisCode": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "encounter/entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"838\"]/following-sibling::value/@code",
+                        "title": "Диагноз отделения. Код по МКБ-10",
+                        "decode": "1.2.643.5.1.13.13.11.1005"
+                    },
+                    "departStandardCode": {
+                        "type": "string",
+                        "xml_type": "ST",
+                        "xpath": "encounter/entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"9043\"]/following-sibling::value/text()",
+                        "title": "Код медицинского стандарта",
+                        "decode": null
+                    },
+                    "departAbortedCaseCode": {
+                        "type": "string",
+                        "xml_type": "ST",
+                        "xpath": "encounter/entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"9044\"]/following-sibling::value/text()",
+                        "title": "Код прерванного случая",
+                        "decode": null
+                    },
+                    "departPaymentType": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "encounter/entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.197\" and @code=\"DEPARTINFO\"]/following-sibling::entry/encounter/entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"827\"]/following-sibling::value/@code",
+                        "title": "Вид оплаты",
+                        "decode": "1.2.643.5.1.13.13.11.1039"
+                    }
+                }
+            }
+        },
+        "SUR": {
+            "type": "array",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.197\" and @code=\"SUR\"]/following-sibling::entry",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "surOperationCode": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "procedure/code/@code",
+                        "title": "Код операции",
+                        "decode": "1.2.643.5.1.13.13.11.1070"
+                    },
+                    "surOperationName": {
+                        "type": "string",
+                        "xml_type": "ST",
+                        "xpath": "procedure/text/text()",
+                        "title": "Наименование операции",
+                        "decode": null
+                    },
+                    "surOperationStartDate": {
+                        "type": "string",
+                        "xml_type": "TS",
+                        "xpath": "procedure/effectiveTime/@value",
+                        "title": "Дата и время начала операции",
+                        "decode": null
+                    },
+                    "performerId": {
+                        "type": "string",
+                        "xml_type": "II",
+                        "xpath": "procedure/performer/assignedEntity/id[1]/@extension",
+                        "title": "Уникальный идентификатор хирурга в МИС",
+                        "decode": null
+                    },
+                    "performerSNILS": {
+                        "type": "string",
+                        "xml_type": "II",
+                        "xpath": "procedure/performer/assignedEntity/id[2]/@extension",
+                        "title": "СНИЛС хирурга",
+                        "decode": null
+                    },
+                    "performerCode": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "procedure/performer/assignedEntity/code/@code",
+                        "title": "Код должности хирурга",
+                        "decode": "1.2.643.5.1.13.13.11.1002"
+                    },
+                    "performerFamily": {
+                        "type": "string",
+                        "xml_type": "ST",
+                        "xpath": "procedure/performer/assignedEntity/assignedPerson/name/family/text()",
+                        "title": "Фамилия хирурга",
+                        "decode": null
+                    },
+                    "performerName": {
+                        "type": "string",
+                        "xml_type": "ST",
+                        "xpath": "procedure/performer/assignedEntity/assignedPerson/name/given/text()",
+                        "title": "Имя хирурга",
+                        "decode": null
+                    },
+                    "performerPatronymic": {
+                        "type": "string",
+                        "xml_type": "ST",
+                        "xpath": "procedure/performer/assignedEntity/assignedPerson/name/identity:Patronymic/text()",
+                        "title": "Отчество хирурга",
+                        "decode": null
+                    },
+                    "departCode": {
+                        "type": "string",
+                        "xml_type": "II",
+                        "xpath": "procedure/participant/participantRole/id/@root",
+                        "title": "Код отделения, где проводилась операция",
+                        "decode": "1.2.643.5.1.13.13.99.2.114"
+                    },
+                    "mainOperation": {
+                        "type": "string",
+                        "xml_type": "BL",
+                        "xpath": "procedure/entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"9045\"]/following-sibling::value/@value",
+                        "title": "Признак основной операции",
+                        "decode": null
+                    },
+                    "anesthesiaCode": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "procedure/entryRelationship/substanceAdministration/consumable/manufacturedProduct/manufacturedLabeledDrug/code/@code",
+                        "title": "Код вида анестезии",
+                        "decode": "1.2.643.5.1.13.13.11.1033"
+                    },
+                    "useEndoscopic": {
+                        "type": "string",
+                        "xml_type": "BL",
+                        "xpath": "procedure/entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.11.1048\" and @code=\"3\"]/following-sibling::value/@value",
+                        "title": "Использование специальной аппаратуры (эндоскопическая)",
+                        "decode": null
+                    },
+                    "useLaser": {
+                        "type": "string",
+                        "xml_type": "BL",
+                        "xpath": "procedure/entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.11.1048\" and @code=\"1\"]/following-sibling::value/@value",
+                        "title": "Использование специальной аппаратуры (лазерная)",
+                        "decode": null
+                    },
+                    "useСryogenic": {
+                        "type": "string",
+                        "xml_type": "BL",
+                        "xpath": "procedure/entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.11.1048\" and @code=\"2\"]/following-sibling::value/@value",
+                        "title": "Использование специальной аппаратуры (криогенная)",
+                        "decode": null
+                    },
+                    "useXray": {
+                        "type": "string",
+                        "xml_type": "BL",
+                        "xpath": "procedure/entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.11.1048\" and @code=\"4\"]/following-sibling::value/@value",
+                        "title": "Использование специальной аппаратуры (рентгеновская)",
+                        "decode": null
+                    },
+                    "surPaymentType": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "procedure/entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"827\"]/following-sibling::value/@code",
+                        "title": "Вид оплаты",
+                        "decode": "1.2.643.5.1.13.13.11.1039"
+                    },
+                    "surComplications": {
+                        "type": "array",
+                        "xpath": "procedure/entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"12383\"]",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "surCompName": {
+                                    "type": "string",
+                                    "xml_type": "ST",
+                                    "xpath": "following-sibling::text/text()",
+                                    "title": "Наименование осложнения",
+                                    "decode": null
+                                },
+                                "surCompCode": {
+                                    "type": "string",
+                                    "xml_type": "CD",
+                                    "xpath": "following-sibling::value/@code",
+                                    "title": "Код осложнения",
+                                    "decode": "1.2.643.5.1.13.13.11.1485"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "DGN": {
+            "type": "array",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.197\" and @code=\"DGN\"]/following-sibling::entry",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "typeCode": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "observation/code/@code",
+                        "title": "Клинический заключительный диагноз. Вид нозологической единицы диагноза",
+                        "decode": "1.2.643.5.1.13.13.11.1077"
+                    },
+                    "text": {
+                        "type": "string",
+                        "xml_type": "ST",
+                        "xpath": "observation/text/text()",
+                        "title": "Клинический заключительный диагноз. Клинический диагноз (текстом)",
+                        "decode": null
+                    },
+                    "code": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "observation/value/@code",
+                        "title": "Клинический заключительный диагноз. Код по МКБ-10",
+                        "decode": "1.2.643.5.1.13.13.11.1005"
+                    },
+                    "pregnancyTerm": {
+                        "type": "number",
+                        "xml_type": "INT",
+                        "xpath": "observation/code/following-sibling::entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"8004\"]/following-sibling::value/translation/@value",
+                        "title": "Срок беременности. Значение",
+                        "decode": null
+                    },
+                    "pregnancyTermUnit": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "observation/code/following-sibling::entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"8004\"]/following-sibling::value/translation/@code",
+                        "title": "Срок беременности. Единицы измерения (дни или недели)",
+                        "decode": "1.2.643.5.1.13.13.11.1358"
+                    }
+                }
+            }
+        },
+        "PATHANATDGN": {
+            "type": "array",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.197\" and @code=\"PATHANATDGN\"]/following-sibling::entry",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "typeCode": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "observation/code/@code",
+                        "title": "Патолого-анатомический диагноз. Вид нозологической единицы диагноза",
+                        "decode": "1.2.643.5.1.13.13.11.1077"
+                    },
+                    "text": {
+                        "type": "string",
+                        "xml_type": "ST",
+                        "xpath": "observation/text/text()",
+                        "title": "Патолого-анатомический диагноз. Клинический диагноз (текстом)",
+                        "decode": null
+                    },
+                    "code": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "observation/value/@code",
+                        "title": "Патолого-анатомический диагноз. Код по МКБ-10",
+                        "decode": "1.2.643.5.1.13.13.11.1005"
+                    },
+                    "pregnancyTerm": {
+                        "type": "number",
+                        "xml_type": "INT",
+                        "xpath": "observation/code/following-sibling::entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"8004\"]/following-sibling::value/translation/@value",
+                        "title": "Срок беременности. Значение",
+                        "decode": null
+                    },
+                    "pregnancyTermUnit": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "observation/code/following-sibling::entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"8004\"]/following-sibling::value/translation/@code",
+                        "title": "Срок беременности. Единицы измерения (дни или недели)",
+                        "decode": "1.2.643.5.1.13.13.11.1358"
+                    }
+                }
+            }
+        },
+        "LINKDOCS": {
+            "type": "array",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.197\" and @code=\"LINKDOCS\"]/following-sibling::entry",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "typeCode": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "act/code/@code",
+                        "title": "Связанные документы. Вид документа",
+                        "decode": "1.2.643.5.1.13.13.11.1522"
+                    },
+                    "text": {
+                        "type": "string",
+                        "xml_type": "ST",
+                        "xpath": "act/text/text()",
+                        "title": "Связанные документы. Примечание к документу",
+                        "decode": null
+                    },
+                    "time": {
+                        "type": "string",
+                        "xml_type": "TS",
+                        "xpath": "act/effectiveTime/@value",
+                        "title": "Связанные документы. Дата выдачи документа",
+                        "decode": null
+                    },
+                    "series": {
+                        "type": "string",
+                        "xml_type": "ST",
+                        "xpath": "act/code/following-sibling::entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"11002\"]/following-sibling::value/text()",
+                        "title": "Связанные документы. Серия документа",
+                        "decode": null
+                    },
+                    "number": {
+                        "type": "string",
+                        "xml_type": "ST",
+                        "xpath": "act/code/following-sibling::entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"11003\"]/following-sibling::value/text()",
+                        "title": "Связанные документы. Номер документа",
+                        "decode": null
+                    },
+                    "form": {
+                        "type": "string",
+                        "xml_type": "CD",
+                        "xpath": "act/code/following-sibling::entryRelationship/observation/code[@codeSystem=\"1.2.643.5.1.13.13.99.2.166\" and @code=\"6058\"]/following-sibling::code/@code",
+                        "title": "Связанные документы. Форма документа",
+                        "decode": "1.2.643.5.1.13.13.99.2.1008"
+                    },
+                    "docId": {
+                        "type": "string",
+                        "xml_type": "II",
+                        "xpath": "act/reference/externalDocument/id/@extension",
+                        "title": "Связанные документы. Уникальный идентификатор документа в МИС",
+                        "decode": null
+                    }
+                }
+            }
+        },
+        "INTS": {
+            "type": "array",
+            "xpath": "//code[@codeSystem=\"1.2.643.5.1.13.13.99.2.197\" and @code=\"DGN\"]/following-sibling::entry",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "a": {
+                        "type": "string",
+                        "xml_type": "INT",
+                        "xpath": "observation/code/@code",
+                        "title": "Клинический заключительный диагноз. Вид нозологической единицы диагноза",
+                        "decode": "1.2.643.5.1.13.13.11.1077"
+                    },
+                    "b": {
+                        "type": "string",
+                        "xml_type": "INT",
+                        "xpath": "observation/code/@code",
+                        "title": "Клинический заключительный диагноз. Вид нозологической единицы диагноза",
+                        "decode": "1.2.643.5.1.13.13.11.1077"
+                    }
+                }
+            }
+        },
+        "MAP_FLOATS": {
+            "type": "object",
+            "properties": {
+                "templateId": {
+                    "type": "string",
+                    "xml_type": "REAL",
+                    "xpath": "/ClinicalDocument/templateId/@root",
+                    "title": "Уникальный идентификатор руководства по реализации СЭМД",
+                    "decode": "1.2.643.5.1.13.13.99.2.638"
+                },
+                "title": {
+                    "type": "string",
+                    "xml_type": "REAL",
+                    "xpath": "/ClinicalDocument/title/text()",
+                    "title": "Заголовок документа",
+                    "decode": null
+                }
+            }
+        }
+    }
+}

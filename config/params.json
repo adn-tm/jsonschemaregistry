@@ -1,0 +1,76 @@
+{
+  "host":{
+    "name":"host",
+    "short":"h",
+    "env":"DB_HOST",
+    "default":"http://localhost",
+    "description": "\t -h(ost) DBMS host"
+  },
+  "port":{
+    "name":"port",
+    "short":"p",
+    "env":"DB_PORT",
+    "default":8123,
+    "description": "\t -p(ort) DBMS port address"
+  },
+  "user":{
+    "name": "user",
+    "short": "u",
+    "env": "DB_USER",
+    "default": "",
+    "description": "\t -u(ser) DBMS refistered user name"
+  },
+  "password":{
+    "name": "password",
+    "short": "pwd",
+    "env": "DB_PASSWORD",
+    "description": "\t -pwd(password) DBMS user password"
+  },
+  "database":{
+    "name": "database",
+    "short": "db",
+    "required":true,
+    "env": "DB_NAME",
+    "default": "semd",
+    "description": "\t -db(database) database (schema) name"
+  },
+  "schemaTable":{
+    "name": "schema",
+    "short": "sch",
+    "required":true,
+    "env": "DB_SCHEMA_TABLE",
+    "default": "_jsonschemas",
+    "description": "\t -s(chema) Schemas table name\n\t\t Table will be created automatically if it not exists"
+  },
+  "httpPort":{
+    "name": "service",
+    "short": "s",
+    "required":true,
+    "env": "PORT",
+    "default": 4000,
+    "description": "\t -s(service) HTTP service port"
+  },
+  "domain": {
+    "name": "domain",
+    "short": "dns",
+    "required":true,
+    "env": "NODE_DOMAIN",
+    "default": "http://localhost:4000",
+    "description": "\t -dns(domain) Registry service domain name"
+  },
+  "kafkaHosts": {
+    "name":"kafka",
+    "short":"k",
+    "env":"KAFKA_BROKERS",
+    "default":"localhost:9092",
+    "description": "\t -k(afka) brokers\n\t\t Comma separated broker list, ex. 'kafka1:9092, kafka2:9092'.\n\t\t By default Kafka broker not used \n "
+  },
+  "topicTemplate": {
+    "name": "topic",
+    "short": "t",
+    "required":true,
+    "env": "KAFKA_TARGET_TOPIC",
+    "default": "semd.json_{{templateId}}",
+    "description": "\t -t(opic) topic with raw JSON documents \n\t\t Template for  Kafka topic for connection DB to it. Use {{templateId}} variable in pattern"
+  }
+}

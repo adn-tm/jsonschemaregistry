@@ -1,3 +1,6 @@
+
+const NO_SQL = true; // output DDL SQL, but no apply
+
 const CH_CONSUMER_GROUP = 'clickhouse';
 const CH_CONSUMERS = 1;
 const CH_CONSUMERS_BLOCK_SIZE = 10;
@@ -60,11 +63,12 @@ class CLickHouseDDL {
         this.schemaTable = schemaTable;
     }
 
-    router () {
+    router() {
         const that = this;
         const router = new Router("/");
         router.get("/:id/:version?", async (req, res, next) => {
             const {version, id}  = req.params;
+            if (NO_SQL) return next({status: 200, version, id, debug:true });
             if (version && !version.match(/^\d+$/)) {
                 return next({status: 400, error: "Bad version"});
             }
@@ -92,7 +96,8 @@ class CLickHouseDDL {
             if (!id.match(/^[a-f\d\-.]+$/)) {
                 return next({status: 400, error: "Bad schema id"});
             }
-            if (!req.body || _.isObject(req.body) || _.isEmpty(req.body)) {
+            if (!req.body || !_.isObject(req.body) || _.isEmpty(req.body)) {
+                console.log("BODY:", req.body)
                 return next({status: 400, error: new Error("Bad request payload")})
             }
 
@@ -102,19 +107,29 @@ class CLickHouseDDL {
             }
             try {
                 let newVersion;
-                if (version) {
-                    const qR = await that.clickhouse.query(`SELECT created FROM '${that.schemaTable}' WHERE id="${id}" AND version=${version} LIMIT 1`).toPromise();
-                    if (qR && qR.length) return next({status: 409, error:`Schema already exists since ${qR[0].created}`});
-                    newVersion = version;
+                if (NO_SQL) {
+                    newVersion = version || 1;
                 } else {
-                    const qR = await that.clickhouse.query(`SELECT MAX(version) as v FROM '${that.schemaTable}' WHERE id="${p}"`).toPromise();
-                    newVersion = (qR && qR.length ? Number(qR[0].v) :0 ) + 1 ;
+                    if (version) {
+                        const qR = await that.clickhouse.query(`SELECT created FROM '${that.schemaTable}' WHERE id="${id}" AND version=${version} LIMIT 1`).toPromise();
+                        if (qR && qR.length) return next({
+                            status: 409,
+                            error: `Schema already exists since ${qR[0].created}`
+                        });
+                        newVersion = version;
+
+                    } else {
+                        const qR = await that.clickhouse.query(`SELECT MAX(version) as v FROM '${that.schemaTable}' WHERE id="${p}"`).toPromise();
+                        newVersion = (qR && qR.length ? Number(qR[0].v) : 0) + 1;
+                    }
                 }
                 const schema = req.body;
-                data["$id"] = `${that.urlPrefix}/${id}/${newVersion}`;
+                schema["$id"] = `${that.urlPrefix}/${id}/${newVersion}`;
                 await that.sync(id, newVersion, schema);
-                await that.clickhouse.insert(`INSERT INTO ${that.schemaTable} (id, version, schema) `,
-                    [{id, version:newVersion, schema:JSON.stringify(schema) }]).toPromise();
+                const q = `INSERT INTO ${that.schemaTable} (id, version, schema) `
+                if (NO_SQL) {
+                    console.log("---SQL: \n"+q, [{id, version:newVersion, schema:JSON.stringify(schema) }])
+                } else await that.clickhouse.insert(q, [{id, version:newVersion, schema:JSON.stringify(schema) }]).toPromise();
                 req.resultData = schema;
                 return next();
             } catch(e) {
@@ -172,9 +187,11 @@ class CLickHouseDDL {
         const fields = CLickHouseDDL.nodeTypeMapper(schema);
         if (!fields || !Array.isArray(fields)) throw new Error("Schema doesn't have any storable fields");
         const database = this.database;
-        const destTopicName = this.kafkaTopicTemplate.replace("{{templateId}}", `${id}.${version}`);
+        const tablesSuffix = `${id}_${version}`;
+        const destTopicName = this.kafkaTopicTemplate.replace("{{templateId}}", `${id}_${version}`);
+
         const queries = [
-            `CREATE TABLE IF NOT EXISTS ${database}.kafka_${destTopicName} ("msg" String ) ENGINE = Kafka SETTINGS \
+            `CREATE TABLE IF NOT EXISTS ${database}.'kafka_${tablesSuffix}' ("msg" String ) ENGINE = Kafka SETTINGS \
                  kafka_broker_list = '${this.kafkaHosts}', \
                  kafka_topic_list = '${destTopicName}', \
                  kafka_group_name = ${CH_CONSUMER_GROUP}, \
@@ -184,39 +201,46 @@ class CLickHouseDDL {
                  kafka_num_consumers = ${CH_CONSUMERS}, \
                  kafka_max_block_size = ${CH_CONSUMERS_BLOCK_SIZE};`,
 
-            `CREATE TABLE IF NOT EXISTS ${database}.'stg_${destTopicName}' (`
+            `CREATE TABLE IF NOT EXISTS ${database}.'stg_${tablesSuffix}' (`
                 + fields.map(f=>` '${f.name}' Nullable(${f.type})`).join(", \n")
                 +`, \n 'topic' String, 'offset'  UInt64, 'timestamp' DateTime) ENGINE = MergeTree ORDER BY ('offset')`,
 
-            `CREATE MATERIALIZED VIEW IF NOT EXISTS ${database}.'kafka_mv_${destTopicName}' TO ${database}.'stg_${destTopicName}' AS select \
+            `CREATE MATERIALIZED VIEW IF NOT EXISTS ${database}.'kafka_mv_${tablesSuffix}' TO ${database}.'stg_${tablesSuffix}' AS select \
                 CAST(JSONExtractKeysAndValues("msg",'String'),'Map(String, String)') as d, \
                 _topic as 'topic', _offset as 'offset', _timestamp as 'timestamp', \n`+
                 fields.map(f=>
                     (f.isArray ?
                         ` arrayMap(s -> CAST(JSONExtractKeysAndValues(s,'String'),'${f.type}'), JSONExtractArrayRaw(d['${f.name}'])) as "${f.name}" `:
-                        ` CAST(d['${f.name}'], Nullable('${f.type}')) as "${f.name}" `)
+                        ` CAST(d['${f.name}'], 'Nullable(${f.type})') as "${f.name}" `)
                 ).join(", \n")+
-                `\n FROM ${database}.'kafka_${destTopicName}';`
+                `\n FROM ${database}.'kafka_${tablesSuffix}';`
         ];
         for(const query of queries) {
-            await this.clickhouse.query(query).toPromise();
+            if (NO_SQL) {
+                console.log("---SQL: \n"+query)
+            } else await this.clickhouse.query(query).toPromise();
         }
     }
 
     async warmUp() {
+        const database = this.database;
         const query = `CREATE TABLE ${database}.'${this.schemaTable}' IF NOT EXISTS (
                 id String,
                 version UInt32,
                 created DateTime,
                 schema JSON
             ) ENGINE=MergeTree(created, (id, version), 8192)`;
-        await this.clickhouse.query(query).toPromise();
-        for await (const row of this.clickhouse.query(`SELECT id, version, schema FROM '${this.schemaTable}' `).stream()) {
-            // console.log(row);
-            try {
-                await this.sync(row.id, row.version, row.schema);
-            } catch (e) {
-                console.error("Re-creating schema error "+e.message);
+        if (NO_SQL) {
+            console.log("---SQL: \n"+query)
+        } else {
+            await this.clickhouse.query(query).toPromise();
+            for await (const row of this.clickhouse.query(`SELECT id, version, schema FROM ${database}.'${this.schemaTable}' `).stream()) {
+                // console.log(row);
+                try {
+                    await this.sync(row.id, row.version, row.schema);
+                } catch (e) {
+                    console.error("Re-creating schema error " + e.message);
+                }
             }
         }
     }

@@ -63,7 +63,7 @@
     "short":"k",
     "env":"KAFKA_BROKERS",
     "default":"localhost:9092",
-    "description": "\t -k(afka) brokers\n\t\t Comma separated broker list, ex. 'kafka1:9092, kafka2:9092'.\n\t\t By default Kafka broker not used \n "
+    "description": "\t -k(afka) brokers\n\t\t Comma separated broker list, ex. 'kafka1:9092, kafka2:9092'.\n "
   },
   "topicTemplate": {
     "name": "topic",

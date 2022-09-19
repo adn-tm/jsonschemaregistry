@@ -1,0 +1,16 @@
+{
+  "BL": "Boolean",
+  "BN": "Boolean",
+  "ED": "Blob",
+  "INT": "Int32",
+  "REAL": "Float",
+  "PQ": "Tuple(Float, String)",
+  "MO": "Tuple(Float, String)",
+  "TS": "Datetime",
+  "SET": "Array(String)",
+  "LIST": "Array(String)",
+  "BAG": "Array(String)",
+  "IVL": "Tuple(String, String)",
+  "HIST": "Array(Map(String, String))",
+  "PIVL": "Tuple(Int32, Int32)"
+}

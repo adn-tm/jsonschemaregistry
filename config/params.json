@@ -2,35 +2,35 @@
   "host":{
     "name":"host",
     "short":"h",
-    "env":"DB_HOST",
+    "env":"CLICKHOUSE_HOST",
     "default":"http://localhost",
     "description": "\t -h(ost) DBMS host"
   },
   "port":{
     "name":"port",
     "short":"p",
-    "env":"DB_PORT",
+    "env":"CLICKHOUSE_PORT",
     "default":8123,
     "description": "\t -p(ort) DBMS port address"
   },
-  "user":{
+  "username":{
     "name": "user",
     "short": "u",
-    "env": "DB_USER",
+    "env": "CLICKHOUSE_USER",
     "default": "",
     "description": "\t -u(ser) DBMS refistered user name"
   },
   "password":{
     "name": "password",
     "short": "pwd",
-    "env": "DB_PASSWORD",
+    "env": "CLICKHOUSE_PASSWORD",
     "description": "\t -pwd(password) DBMS user password"
   },
   "database":{
     "name": "database",
     "short": "db",
     "required":true,
-    "env": "DB_NAME",
+    "env": "CLICKHOUSE_DB",
     "default": "semd",
     "description": "\t -db(database) database (schema) name"
   },
@@ -38,7 +38,7 @@
     "name": "schema",
     "short": "sch",
     "required":true,
-    "env": "DB_SCHEMA_TABLE",
+    "env": "CLICKHOUSE_SCHEMA_TABLE",
     "default": "_jsonschemas",
     "description": "\t -s(chema) Schemas table name\n\t\t Table will be created automatically if it not exists"
   },
@@ -46,7 +46,7 @@
     "name": "service",
     "short": "s",
     "required":true,
-    "env": "PORT",
+    "env": "NODE_PORT",
     "default": 4000,
     "description": "\t -s(service) HTTP service port"
   },

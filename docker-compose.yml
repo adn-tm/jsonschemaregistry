@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  registry:
+    image: bitnami/node:12
+    hostname: registry
+    depends_on:
+      - clickhouse
+    ports:
+      - 4000:4000
+    volumes:
+      - "./:/app:rw"
+    environment:
+      - CLICKHOUSE_HOST=http://clickhouse
+      - CLICKHOUSE_PORT=8123
+      - CLICKHOUSE_USER=ch_user
+      - CLICKHOUSE_PASSWORD=ch_pass
+      - CLICKHOUSE_DB=de
+      - CLICKHOUSE_SCHEMA_TABLE=_jsonschemas
+      - NODE_PORT=4000
+      - NODE_DOMAIN=http://localhost:4000
+      - KAFKA_BROKERS=kafka:9092
+      - KAFKA_TARGET_TOPIC=semd.json_{{templateId}}
+    # command: "sh -c 'npm install  && node index.js'"
+    command: "sh"
+    tty: true
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    hostname: clickhouse
+    ports:
+      - 8123:8123
+      - 9000:9000
+    volumes:
+      - "./clickhouse/data:/var/lib/clickhouse/"
+      - "./clickhouse/logs:/var/log/clickhouse-server/"
+    environment:
+      - CLICKHOUSE_DB=de
+      - CLICKHOUSE_USER=ch_user
+      - CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1
+      - CLICKHOUSE_PASSWORD=ch_pass

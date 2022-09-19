@@ -9,13 +9,17 @@ const app = express();
 const server = http.createServer(app);
 const {CLickHouseDDL} = require("./ddl/clickhouse.js")
 // const example = require("./example.json");
-// console.log(JSON.stringify(CLickHouseDDL.nodeTypeMapper(example), null, 2))
+ console.log(JSON.stringify(params, null, 2));
 
 app.use(compression());
 app.use(bodyParser.json({ limit: '50mb' }));
 
 const clickhouseDDL = new CLickHouseDDL({urlPrefix: params.domain+"/"+API_VERSION, ...params})
-clickhouseDDL.warmUp();
+clickhouseDDL.warmUp().catch(e=>{
+    console.error("Database warm up error", e);
+    process.exit(-1);
+})
+
 app.use("/"+API_VERSION, clickhouseDDL.router() );
 
 app.use((err, req, res, next)=>{

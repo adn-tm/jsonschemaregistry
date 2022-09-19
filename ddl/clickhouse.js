@@ -1,44 +1,25 @@
+const NO_SQL = false; // output DDL SQL, but no apply
 
-const NO_SQL = true; // output DDL SQL, but no apply
-
-const CH_CONSUMER_GROUP = 'clickhouse';
+const CH_CONSUMER_GROUP = "clickhouse";
 const CH_CONSUMERS = 1;
 const CH_CONSUMERS_BLOCK_SIZE = 10;
 const CH_CONSUMER_TREADS = 0;
 
 const {ClickHouse}  = require("clickhouse");
-const fs = require("fs-extra");
 const {Router} = require("express");
-const path = require("path");
 const {responseFormatter} = require("../formats");
 const _ = require("lodash");
 const Ajv = require("ajv");
-
-
-const CDA_MAP = {
-    "BL": "Boolean",
-    "BN": "Boolean",
-    "ED": "Blob",
-    "INT": "Int32",
-    "REAL": "Float",
-    "PQ": "Tuple(Float, String)",
-    "MO": "Tuple(Float, String)",
-    "TS": "Datetime",
-    "SET": "Array(String)",
-    "LIST": "Array(String)",
-    "BAG": "Array(String)",
-    "IVL": "Tuple(String, String)",
-    "HIST": "Array(Map(String, String))",
-    "PIVL": "Tuple(Int32, Int32)"
-}
+const CDA_MAP = require("../config/cda-map.json")
 const DEFAULT_LEAF_NODES_TYPE = "String"
+
 class CLickHouseDDL {
     constructor({urlPrefix, host, port, database, schemaTable, username, password, kafkaHosts, topicTemplate } ) {
         this.urlPrefix = urlPrefix;
         this.kafkaHosts = kafkaHosts || "localhost:9092";
         this.kafkaTopicTemplate = topicTemplate || "{{templateId}}";
         this.database = database;
-        this.clickhouse = new ClickHouse({
+        const opts = {
             url: host,
             port: port || 8123,
             debug: false,
@@ -50,7 +31,7 @@ class CLickHouseDDL {
             raw: false,
             config: {
                 database,
-                // session_id                              : 'session_id if neeed',
+                // session_id                              : "session_id if neeed",
                 session_timeout: 60,
                 output_format_json_quote_64bit_integers: 0,
                 enable_http_compression: 0
@@ -59,29 +40,53 @@ class CLickHouseDDL {
             // reqParams: {
             //     ...
             // }
-        });
+        }
+        console.log(opts)
+        this.clickhouse = new ClickHouse(opts);
         this.schemaTable = schemaTable;
     }
 
     router() {
         const that = this;
         const router = new Router("/");
-        router.get("/:id/:version?", async (req, res, next) => {
+        const database = this.database;
+        router.get("/:id", async (req, res, next) => {
+            const {id}  = req.params;
+            if (!id.match(/^[a-f\d\-.]+$/)) {
+                return next({status: 400, error: "Bad schema id"});
+            }
+            try {
+                const q = `SELECT id, version, jsonschema, created FROM ${database}."${that.schemaTable}" WHERE id='${id}' ORDER BY version DESC`;
+                console.log("---SQL: \n"+q);
+                if (NO_SQL) {
+                    return next({status: 200, id, debug: true});
+                }
+                const qR = await that.clickhouse.query(q).toPromise();
+                if (!qR && !qR.length) return next({status: 404});
+                const {jsonschema}  = qR[0];
+                req.resultData = qR;
+                return next();
+            } catch(e) {
+                return next({status:500, error:e});
+            }
+        }, responseFormatter)
+
+        router.get("/:id/:version", async (req, res, next) => {
             const {version, id}  = req.params;
             if (NO_SQL) return next({status: 200, version, id, debug:true });
-            if (version && !version.match(/^\d+$/)) {
+            if (version!=="@" && !version.match(/^\d+$/)) {
                 return next({status: 400, error: "Bad version"});
             }
             if (!id.match(/^[a-f\d\-.]+$/)) {
                 return next({status: 400, error: "Bad schema id"});
             }
             try {
-                const q = `SELECT schema FROM ${that.schemaTable} WHERE id="${id}" ` + (version ? ` AND version=${version}` : "") +
+                const q = `SELECT jsonschema FROM ${database}."${that.schemaTable}" WHERE id='${id}' ` + (version!="@" ? ` AND version=${version}` : "") +
                           ` ORDER BY created DESC LIMIT 1`;
                 const qR = await that.clickhouse.query(q).toPromise();
                 if (!qR && !qR.length) return next({status: 404});
-                const {schema}  = qR[0];
-                req.resultData = _.isString(schema) ? JSON.parse(schema) : schema;
+                const {jsonschema}  = qR[0];
+                req.resultData = _.isString(jsonschema) ? JSON.parse(jsonschema) : jsonschema;
                 return next();
             } catch(e) {
                 return next({status:500, error:e});
@@ -111,7 +116,9 @@ class CLickHouseDDL {
                     newVersion = version || 1;
                 } else {
                     if (version) {
-                        const qR = await that.clickhouse.query(`SELECT created FROM '${that.schemaTable}' WHERE id="${id}" AND version=${version} LIMIT 1`).toPromise();
+                        const q = `SELECT created FROM ${database}."${that.schemaTable}" WHERE id='${id}' AND version=${version} LIMIT 1`
+                        console.log("---SQL: \n"+q)
+                        const qR = await that.clickhouse.query(q).toPromise();
                         if (qR && qR.length) return next({
                             status: 409,
                             error: `Schema already exists since ${qR[0].created}`
@@ -119,17 +126,22 @@ class CLickHouseDDL {
                         newVersion = version;
 
                     } else {
-                        const qR = await that.clickhouse.query(`SELECT MAX(version) as v FROM '${that.schemaTable}' WHERE id="${p}"`).toPromise();
+                        const qR = await that.clickhouse.query(`SELECT MAX(version) as v FROM ${database}."${that.schemaTable}" WHERE id='${p}'`).toPromise();
                         newVersion = (qR && qR.length ? Number(qR[0].v) : 0) + 1;
                     }
                 }
                 const schema = req.body;
                 schema["$id"] = `${that.urlPrefix}/${id}/${newVersion}`;
                 await that.sync(id, newVersion, schema);
-                const q = `INSERT INTO ${that.schemaTable} (id, version, schema) `
-                if (NO_SQL) {
-                    console.log("---SQL: \n"+q, [{id, version:newVersion, schema:JSON.stringify(schema) }])
-                } else await that.clickhouse.insert(q, [{id, version:newVersion, schema:JSON.stringify(schema) }]).toPromise();
+                const q = `INSERT INTO ${database}."${that.schemaTable}" (id, version, jsonschema) `
+                console.log("---SQL: \n"+q, [{id, version:newVersion, jsonschema:JSON.stringify(schema) }])
+                if (!NO_SQL) {
+                    await that.clickhouse.insert(q, [{
+                        id,
+                        version: newVersion,
+                        jsonschema: JSON.stringify(schema)
+                    }]).toPromise();
+                }
                 req.resultData = schema;
                 return next();
             } catch(e) {
@@ -175,69 +187,84 @@ class CLickHouseDDL {
             if (!parentKey) return children;
             const mapTYpe = _.uniq(children.map(a=>a.type));
             if (mapTYpe.length===1) {
-                return {name: parentKey, type: `Map(String, ${mapTYpe[0]})`, items:mapTYpe[0]}
+                return {name: parentKey, isMap:true, type: `Map(String, ${mapTYpe[0]})`, items:mapTYpe[0]}
             }
             else {
-                return {name: parentKey, type: `Map(String, ${DEFAULT_LEAF_NODES_TYPE})`, items: DEFAULT_LEAF_NODES_TYPE}
+                return {name: parentKey, isMap:true,  type: `Map(String, ${DEFAULT_LEAF_NODES_TYPE})`, items: DEFAULT_LEAF_NODES_TYPE}
             }
         }
     }
-
+    static schemaIdFromOID(oid) {
+        const p = (oid || "").split(".");
+        if (p.length<3) return;
+        return {id:p[p.length-3], version:[p.length-1]}
+    }
     async sync(id, version, schema) {
         const fields = CLickHouseDDL.nodeTypeMapper(schema);
         if (!fields || !Array.isArray(fields)) throw new Error("Schema doesn't have any storable fields");
         const database = this.database;
         const tablesSuffix = `${id}_${version}`;
-        const destTopicName = this.kafkaTopicTemplate.replace("{{templateId}}", `${id}_${version}`);
+        const destTopicName = this.kafkaTopicTemplate
+            .replace("{{id}}", id)
+            .replace("{{version}}", version)
+            .replace("{{templateId}}", `${id}_${version}`);
 
         const queries = [
-            `CREATE TABLE IF NOT EXISTS ${database}.'kafka_${tablesSuffix}' ("msg" String ) ENGINE = Kafka SETTINGS \
+            `CREATE TABLE IF NOT EXISTS ${database}."kafka_${tablesSuffix}" ("msg" String ) ENGINE = Kafka SETTINGS \
                  kafka_broker_list = '${this.kafkaHosts}', \
                  kafka_topic_list = '${destTopicName}', \
-                 kafka_group_name = ${CH_CONSUMER_GROUP}, \
+                 kafka_group_name = '${CH_CONSUMER_GROUP}', \
                  input_format_skip_unknown_fields=1, \
                  kafka_format = 'JSONAsString', \
                  kafka_thread_per_consumer = ${CH_CONSUMER_TREADS}, \
                  kafka_num_consumers = ${CH_CONSUMERS}, \
                  kafka_max_block_size = ${CH_CONSUMERS_BLOCK_SIZE};`,
 
-            `CREATE TABLE IF NOT EXISTS ${database}.'stg_${tablesSuffix}' (`
-                + fields.map(f=>` '${f.name}' Nullable(${f.type})`).join(", \n")
-                +`, \n 'topic' String, 'offset'  UInt64, 'timestamp' DateTime) ENGINE = MergeTree ORDER BY ('offset')`,
+            `CREATE TABLE IF NOT EXISTS ${database}."stg_${tablesSuffix}" (`
+                + fields
+                    .map(f=>(f.isArray || f.isMap)? ` "${f.name}" ${f.type}` :` "${f.name}" Nullable(${f.type})`)
+                    .join(", \n")
+                +`, \n "topic" String, "offset"  UInt64, "timestamp" DateTime) ENGINE = MergeTree ORDER BY ("offset")`,
 
-            `CREATE MATERIALIZED VIEW IF NOT EXISTS ${database}.'kafka_mv_${tablesSuffix}' TO ${database}.'stg_${tablesSuffix}' AS select \
+            `CREATE MATERIALIZED VIEW IF NOT EXISTS ${database}."kafka_mv_${tablesSuffix}" TO ${database}."stg_${tablesSuffix}" AS select \
                 CAST(JSONExtractKeysAndValues("msg",'String'),'Map(String, String)') as d, \
-                _topic as 'topic', _offset as 'offset', _timestamp as 'timestamp', \n`+
+                _topic as "topic", _offset as "offset", _timestamp as "timestamp", \n`+
                 fields.map(f=>
                     (f.isArray ?
-                        ` arrayMap(s -> CAST(JSONExtractKeysAndValues(s,'String'),'${f.type}'), JSONExtractArrayRaw(d['${f.name}'])) as "${f.name}" `:
-                        ` CAST(d['${f.name}'], 'Nullable(${f.type})') as "${f.name}" `)
+                        ` arrayMap(s -> CAST(JSONExtractKeysAndValues(s,'String'),'${f.items}'), JSONExtractArrayRaw(d['${f.name}'])) as "${f.name}" `:
+                            (f.isMap ? ` CAST(d['${f.name}'], '${f.type}') as "${f.name}" `
+                                : ` CAST(d['${f.name}'], 'Nullable(${f.type})') as "${f.name}" `)
+                    )
                 ).join(", \n")+
-                `\n FROM ${database}.'kafka_${tablesSuffix}';`
+                `\n FROM ${database}."kafka_${tablesSuffix}";`
         ];
         for(const query of queries) {
-            if (NO_SQL) {
-                console.log("---SQL: \n"+query)
-            } else await this.clickhouse.query(query).toPromise();
+            console.log("---SQL: \n"+query)
+            if (!NO_SQL) {
+                // try {
+                    await this.clickhouse.query(query).toPromise();
+                // } catch(e) {
+                //
+                // }
+            }
         }
     }
 
     async warmUp() {
         const database = this.database;
-        const query = `CREATE TABLE ${database}.'${this.schemaTable}' IF NOT EXISTS (
+        const query = `CREATE TABLE  IF NOT EXISTS ${database}."${this.schemaTable}" (
                 id String,
                 version UInt32,
                 created DateTime,
-                schema JSON
-            ) ENGINE=MergeTree(created, (id, version), 8192)`;
-        if (NO_SQL) {
-            console.log("---SQL: \n"+query)
-        } else {
+                jsonschema String
+            ) ENGINE= MergeTree ORDER BY ("id", "version")`;
+        console.log("---SQL: \n"+query)
+        if (!NO_SQL) {
             await this.clickhouse.query(query).toPromise();
-            for await (const row of this.clickhouse.query(`SELECT id, version, schema FROM ${database}.'${this.schemaTable}' `).stream()) {
+            for await (const row of this.clickhouse.query(`SELECT id, version, jsonschema FROM ${database}."${this.schemaTable}" `).stream()) {
                 // console.log(row);
                 try {
-                    await this.sync(row.id, row.version, row.schema);
+                    await this.sync(row.id, row.version, row.jsonschema);
                 } catch (e) {
                     console.error("Re-creating schema error " + e.message);
                 }

@@ -5,6 +5,13 @@ function readParams() {
     const cmd = argsProcessor() || {};
     if (cmd.h || cmd.help) {
         console.log("XML 2 JSON stream convertor. Use with parameters:");
+        if (cmd.env) {
+            for (let p in options) {
+                if (options[p].env)
+                    console.log(`${options[p].env}=`+(options[p].default ? options[p].default : ""));
+            }
+            process.exit(0);
+        }
         for (let p in options) {
             console.log(options[p].description);
             if (options[p].env)
@@ -15,6 +22,7 @@ function readParams() {
         }
         process.exit(0);
     }
+
 
     function _opt(cmd, option) {
         return cmd[option.name] || cmd[option.short] || (option.env ? process.env[option.env] : undefined) || option.default;

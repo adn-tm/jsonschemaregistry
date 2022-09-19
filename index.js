@@ -15,7 +15,20 @@ app.use(compression());
 app.use(bodyParser.json({ limit: '50mb' }));
 
 const clickhouseDDL = new CLickHouseDDL({urlPrefix: params.domain+"/"+API_VERSION, ...params})
-clickhouseDDL.warmUp().catch(e=>{
+async function waitForWarm() {
+    let lastE;
+    for(let i=0; i<20; i++) {
+        try {
+            await clickhouseDDL.warmUp()
+            return;
+        } catch (e) {
+            lastE = e;
+        }
+    }
+    throw lastE;
+}
+
+waitForWarm().catch(e => {
     console.error("Database warm up error", e);
     process.exit(-1);
 })

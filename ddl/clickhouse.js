@@ -62,7 +62,7 @@ class CLickHouseDDL {
                     return next({status: 200, id, debug: true});
                 }
                 const qR = await that.clickhouse.query(q).toPromise();
-                if (!qR && !qR.length) return next({status: 404});
+                if (!qR || !qR.length) return next({status: 404});
                 const {jsonschema}  = qR[0];
                 req.resultData = qR;
                 return next();
@@ -147,7 +147,7 @@ class CLickHouseDDL {
             } catch(e) {
                 return next({status:500, error:e});
             }
-        })
+        }, responseFormatter)
         return router;
     }
 
@@ -185,13 +185,15 @@ class CLickHouseDDL {
                 if (a) children.push(a);
             }
             if (!parentKey) return children;
-            const mapTYpe = _.uniq(children.map(a=>a.type));
-            if (mapTYpe.length===1) {
-                return {name: parentKey, isMap:true, type: `Map(String, ${mapTYpe[0]})`, items:mapTYpe[0]}
-            }
-            else {
-                return {name: parentKey, isMap:true,  type: `Map(String, ${DEFAULT_LEAF_NODES_TYPE})`, items: DEFAULT_LEAF_NODES_TYPE}
-            }
+            const tupleDef=children.map(f=>`"${f.name}" ${f.type} `).join(", ");
+            return {name: parentKey, isMap:true,  type: `Tuple(${tupleDef})`}
+            // const mapTYpe = _.uniq(children.map(a=>a.type));
+            // if (mapTYpe.length===1) {
+            //     return {name: parentKey, isMap:true, type: `Map(String, ${mapTYpe[0]})`, items:mapTYpe[0]}
+            // }
+            // else {
+            //     return {name: parentKey, isMap:true,  type: `Map(String, ${DEFAULT_LEAF_NODES_TYPE})`, items: DEFAULT_LEAF_NODES_TYPE}
+            // }
         }
     }
     static schemaIdFromOID(oid) {
@@ -231,11 +233,15 @@ class CLickHouseDDL {
                 _topic as "topic", _offset as "offset", _timestamp as "timestamp", \n`+
                 fields.map(f=>
                     (f.isArray ?
-                        ` arrayMap(s -> CAST(JSONExtractKeysAndValues(s,'String'),'${f.items}'), JSONExtractArrayRaw(d['${f.name}'])) as "${f.name}" `:
+                        ` arrayMap(s -> JSONExtract(s, '${f.items}'), JSONExtractArrayRaw(d['${f.name}'])) as "${f.name}" `:
                             (f.isMap ? ` CAST(d['${f.name}'], '${f.type}') as "${f.name}" `
                                 : ` CAST(d['${f.name}'], 'Nullable(${f.type})') as "${f.name}" `)
                     )
-                ).join(", \n")+
+// arrayMap(s -> JSONExtract(s,'Tuple("typeCode" String , "text" String , "code" String , "pregnancyTerm" Int32 , "pregnancyTermUnit" String )'),
+//     JSONExtractArrayRaw(d['REFDGN'])) as "REFDGN" ,
+
+
+    ).join(", \n")+
                 `\n FROM ${database}."kafka_${tablesSuffix}";`
         ];
         for(const query of queries) {

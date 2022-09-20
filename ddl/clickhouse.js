@@ -156,14 +156,14 @@ class CLickHouseDDL {
         //   "TS": "DateTime",
         if (["string", "number", "boolean"].indexOf(node.type)>=0) {
             if (node.xml_type)  {
-                return {name: parentKey, type:CDA_MAP[node.xml_type] || DEFAULT_LEAF_NODES_TYPE};
+                return {name: parentKey, type:CDA_MAP[node.xml_type] || DEFAULT_LEAF_NODES_TYPE, title:node.title || node.description };
             } else {
-                return {name: parentKey, type: DEFAULT_LEAF_NODES_TYPE};
+                return {name: parentKey, type: DEFAULT_LEAF_NODES_TYPE, title:node.title || node.description };
             }
         }
         if (node.type==="array") {
             if (!node.items) throw new Error("'items' isn't defined: "+JSON.stringify(node))
-            if (!node.items)  return DEFAULT_LEAF_NODES_TYPE;
+            if (!node.items)  return {name: parentKey, type: DEFAULT_LEAF_NODES_TYPE, title:node.title || node.description };
             let itemTypes = CLickHouseDDL.nodeTypeMapper(node.items, parentKey);
             if (itemTypes && Array.isArray(itemTypes)) {
                 itemTypes = _.uniq(r.map(a => a.type));
@@ -171,12 +171,12 @@ class CLickHouseDDL {
                 itemTypes = itemTypes.type
             } else itemTypes= DEFAULT_LEAF_NODES_TYPE
             if (!Array.isArray(itemTypes)) {
-                return {name: parentKey, isArray:true, type:`Array(${itemTypes})`, items:itemTypes };
+                return {name: parentKey, isArray:true, type:`Array(${itemTypes})`, items:itemTypes, title:node.title || node.description };
             }
             if (itemTypes.length===1) {
-                return {name: parentKey, isArray:true, type: `Array(${itemTypes[0]})`, items:itemTypes[0]};
+                return {name: parentKey, isArray:true, type: `Array(${itemTypes[0]})`, items:itemTypes[0], title:node.title || node.description };
             } else
-                return {name: parentKey, isArray:true, type: `Array(${DEFAULT_LEAF_NODES_TYPE})`, items: DEFAULT_LEAF_NODES_TYPE };
+                return {name: parentKey, isArray:true, type: `Array(${DEFAULT_LEAF_NODES_TYPE})`, items: DEFAULT_LEAF_NODES_TYPE, title:node.title || node.description  };
         }
         if (node.type==="object") {
             if (!node.properties) throw new Error("'properties' isn't defined: "+JSON.stringify(node))
@@ -187,7 +187,7 @@ class CLickHouseDDL {
             }
             if (!parentKey) return children;
             const tupleDef=children.map(f=>`"${f.name}" ${f.type} `).join(", ");
-            return {name: parentKey, isMap:true,  type: `Tuple(${tupleDef})`}
+            return {name: parentKey, isMap:true,  type: `Tuple(${tupleDef})`, title:node.title || node.description }
             // const mapTYpe = _.uniq(children.map(a=>a.type));
             // if (mapTYpe.length===1) {
             //     return {name: parentKey, isMap:true, type: `Map(String, ${mapTYpe[0]})`, items:mapTYpe[0]}
@@ -231,8 +231,10 @@ class CLickHouseDDL {
 
             `CREATE TABLE IF NOT EXISTS ${database}."stg_${tablesSuffix}" (`
             + fields
-                .map(f=>(f.isArray || f.isMap)? ` "${f.name}" ${f.type}` :` "${f.name}" Nullable(${f.type})`)
-                .join(", \n")
+                .map(f=>(
+                        (f.isArray || f.isMap)? ` "${f.name}" ${f.type}` :` "${f.name}" Nullable(${f.type})`+
+                        (f.title ? `comment '${f.title.replaceAll("'", '"')}'`:"")
+                )).join(", \n")
             +`, \n "topic" String, "offset"  UInt64, "timestamp" DateTime) ENGINE = MergeTree ORDER BY ("offset")`,
 
             `CREATE MATERIALIZED VIEW IF NOT EXISTS ${database}."kafka_mv_${tablesSuffix}" TO ${database}."stg_${tablesSuffix}" AS `+

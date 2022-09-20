@@ -82,7 +82,7 @@ class CLickHouseDDL {
             }
             try {
                 const q = `SELECT jsonschema FROM ${database}."${that.schemaTable}" WHERE id='${id}' ` + (version!="@" ? ` AND version=${version}` : "") +
-                          ` ORDER BY created DESC LIMIT 1`;
+                    ` ORDER BY created DESC LIMIT 1`;
                 const qR = await that.clickhouse.query(q).toPromise();
                 if (!qR && !qR.length) return next({status: 404});
                 const {jsonschema}  = qR[0];
@@ -153,6 +153,7 @@ class CLickHouseDDL {
 
     static nodeTypeMapper(node, parentKey) {
         if (!node || !node.type || node.virtual) return;
+        //   "TS": "DateTime",
         if (["string", "number", "boolean"].indexOf(node.type)>=0) {
             if (node.xml_type)  {
                 return {name: parentKey, type:CDA_MAP[node.xml_type] || DEFAULT_LEAF_NODES_TYPE};
@@ -170,7 +171,7 @@ class CLickHouseDDL {
                 itemTypes = itemTypes.type
             } else itemTypes= DEFAULT_LEAF_NODES_TYPE
             if (!Array.isArray(itemTypes)) {
-                 return {name: parentKey, isArray:true, type:`Array(${itemTypes})`, items:itemTypes };
+                return {name: parentKey, isArray:true, type:`Array(${itemTypes})`, items:itemTypes };
             }
             if (itemTypes.length===1) {
                 return {name: parentKey, isArray:true, type: `Array(${itemTypes[0]})`, items:itemTypes[0]};
@@ -210,7 +211,12 @@ class CLickHouseDDL {
             .replace("{{id}}", id)
             .replace("{{version}}", version)
             .replace("{{templateId}}", `${id}_${version}`);
-
+        let withSentence="";
+        const withFields=fields.filter(f=>(f.isMap || f.isArray)).map(f=>(
+            f.isArray ?
+                ` arrayMap(s -> JSONExtract(s, '${f.items}'), JSONExtractArrayRaw(d['${f.name}'])) as "${f.name}" `:
+                ` CAST(d['${f.name}'], '${f.type}') as "${f.name}" `));
+        if (withFields.length) withSentence="WITH "+withFields.join(", \n")
         const queries = [
             `CREATE TABLE IF NOT EXISTS ${database}."kafka_${tablesSuffix}" ("msg" String ) ENGINE = Kafka SETTINGS \
                  kafka_broker_list = '${this.kafkaHosts}', \
@@ -223,32 +229,32 @@ class CLickHouseDDL {
                  kafka_max_block_size = ${CH_CONSUMERS_BLOCK_SIZE};`,
 
             `CREATE TABLE IF NOT EXISTS ${database}."stg_${tablesSuffix}" (`
-                + fields
-                    .map(f=>(f.isArray || f.isMap)? ` "${f.name}" ${f.type}` :` "${f.name}" Nullable(${f.type})`)
-                    .join(", \n")
-                +`, \n "topic" String, "offset"  UInt64, "timestamp" DateTime) ENGINE = MergeTree ORDER BY ("offset")`,
+            + fields
+                .map(f=>(f.isArray || f.isMap)? ` "${f.name}" ${f.type}` :` "${f.name}" Nullable(${f.type})`)
+                .join(", \n")
+            +`, \n "topic" String, "offset"  UInt64, "timestamp" DateTime) ENGINE = MergeTree ORDER BY ("offset")`,
 
-            `CREATE MATERIALIZED VIEW IF NOT EXISTS ${database}."kafka_mv_${tablesSuffix}" TO ${database}."stg_${tablesSuffix}" AS select \
+            `CREATE MATERIALIZED VIEW IF NOT EXISTS ${database}."kafka_mv_${tablesSuffix}" TO ${database}."stg_${tablesSuffix}" AS `+
+            withSentence
+            +` select \
                 CAST(JSONExtractKeysAndValues("msg",'String'),'Map(String, String)') as d, \
                 _topic as "topic", _offset as "offset", _timestamp as "timestamp", \n`+
-                fields.map(f=>
-                    (f.isArray ?
-                        ` arrayMap(s -> JSONExtract(s, '${f.items}'), JSONExtractArrayRaw(d['${f.name}'])) as "${f.name}" `:
-                            (f.isMap ? ` CAST(d['${f.name}'], '${f.type}') as "${f.name}" `
-                                : ` CAST(d['${f.name}'], 'Nullable(${f.type})') as "${f.name}" `)
-                    )
+            fields.map(f=> ((!f.isArray && !f.isMap ? ` CAST(d['${f.name}'], 'Nullable(${f.type})') as `:"")+`"${f.name}" `)
+                // (f.isArray ?
+                //     ` arrayMap(s -> JSONExtract(s, '${f.items}'), JSONExtractArrayRaw(d['${f.name}'])) as "${f.name}" `:
+                //         (f.isMap ? ` CAST(d['${f.name}'], '${f.type}') as "${f.name}" `
+                //             : ` CAST(d['${f.name}'], 'Nullable(${f.type})') as "${f.name}" `)
+                // )
 // arrayMap(s -> JSONExtract(s,'Tuple("typeCode" String , "text" String , "code" String , "pregnancyTerm" Int32 , "pregnancyTermUnit" String )'),
 //     JSONExtractArrayRaw(d['REFDGN'])) as "REFDGN" ,
-
-
-    ).join(", \n")+
-                `\n FROM ${database}."kafka_${tablesSuffix}";`
+            ).join(", \n")+
+            `\n FROM ${database}."kafka_${tablesSuffix}";`
         ];
         for(const query of queries) {
             console.log("---SQL: \n"+query)
             if (!NO_SQL) {
                 // try {
-                    await this.clickhouse.query(query).toPromise();
+                await this.clickhouse.query(query).toPromise();
                 // } catch(e) {
                 //
                 // }
@@ -280,5 +286,3 @@ class CLickHouseDDL {
 }
 
 module.exports = {CLickHouseDDL};
-
-

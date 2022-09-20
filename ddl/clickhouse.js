@@ -233,7 +233,7 @@ class CLickHouseDDL {
             + fields
                 .map(f=>(
                         (f.isArray || f.isMap)? ` "${f.name}" ${f.type}` :` "${f.name}" Nullable(${f.type})`+
-                        (f.title ? `comment '${f.title.replaceAll("'", '"')}'`:"")
+                        (f.title ? `comment '${f.title.replace(/[']/gmi, '"')}'`:"")
                 )).join(", \n")
             +`, \n "topic" String, "offset"  UInt64, "timestamp" DateTime) ENGINE = MergeTree ORDER BY ("offset")`,
 

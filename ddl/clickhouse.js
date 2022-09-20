@@ -203,6 +203,7 @@ class CLickHouseDDL {
         return {id:p[p.length-3], version:[p.length-1]}
     }
     async sync(id, version, schema) {
+        if (typeof schema === "string") schema = JSON.parse(schema);
         const fields = CLickHouseDDL.nodeTypeMapper(schema);
         if (!fields || !Array.isArray(fields)) throw new Error("Schema doesn't have any storable fields");
         const database = this.database;

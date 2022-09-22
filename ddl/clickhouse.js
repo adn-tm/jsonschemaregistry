@@ -84,7 +84,10 @@ class CLickHouseDDL {
                 const q = `SELECT jsonschema FROM ${database}."${that.schemaTable}" WHERE id='${id}' ` + (version!="@" ? ` AND version=${version}` : "") +
                     ` ORDER BY created DESC LIMIT 1`;
                 const qR = await that.clickhouse.query(q).toPromise();
-                if (!qR && !qR.length) return next({status: 404});
+                if (!qR || !qR.length) {
+                    console.log("scheme not found, ", req.url, q)
+                    return next({status: 404, url:req.url});
+                }
                 const {jsonschema}  = qR[0];
                 req.resultData = _.isString(jsonschema) ? JSON.parse(jsonschema) : jsonschema;
                 return next();
@@ -232,7 +235,7 @@ class CLickHouseDDL {
             `CREATE TABLE IF NOT EXISTS ${database}."stg_${tablesSuffix}" (`
             + fields
                 .map(f=>(
-                        (f.isArray || f.isMap)? ` "${f.name}" ${f.type}` :` "${f.name}" Nullable(${f.type})`+
+                    (f.isArray || f.isMap)? ` "${f.name}" ${f.type}` :` "${f.name}" Nullable(${f.type})`+
                         (f.title ? `comment '${f.title.replace(/[']/gmi, '"')}'`:"")
                 )).join(", \n")
             +`, \n "topic" String, "offset"  UInt64, "timestamp" DateTime) ENGINE = MergeTree ORDER BY ("offset")`,

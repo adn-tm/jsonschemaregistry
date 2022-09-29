@@ -6,6 +6,7 @@
   "REAL": "Float",
   "PQ": "Tuple(Float, String)",
   "MO": "Tuple(Float, String)",
+  "TS": "Datetime",
   "SET": "Array(String)",
   "LIST": "Array(String)",
   "BAG": "Array(String)",

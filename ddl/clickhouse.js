@@ -159,7 +159,10 @@ class CLickHouseDDL {
         //   "TS": "DateTime",
         if (["string", "number", "boolean"].indexOf(node.type)>=0) {
             if (node.xml_type)  {
-                return {name: parentKey, type:CDA_MAP[node.xml_type] || DEFAULT_LEAF_NODES_TYPE, title:node.title || node.description };
+                const type = CDA_MAP[node.xml_type] || DEFAULT_LEAF_NODES_TYPE;
+                if (typeof type === "string")
+                    return {name: parentKey, type, title:node.title || node.description };
+                else return {...type, name: parentKey, title:node.title || node.description };
             } else {
                 return {name: parentKey, type: DEFAULT_LEAF_NODES_TYPE, title:node.title || node.description };
             }
@@ -218,8 +221,11 @@ class CLickHouseDDL {
         let withSentence="";
         const withFields=fields.filter(f=>(f.isMap || f.isArray)).map(f=>(
             f.isArray ?
-                ` arrayMap(s -> JSONExtract(s, '${f.items}'), JSONExtractArrayRaw(d['${f.name}'])) as "${f.name}" `:
-                ` CAST(d['${f.name}'], '${f.type}') as "${f.name}" `));
+                ` arrayMap(s -> JSONExtract(s, '${f.items}'), JSONExtractArrayRaw(d['${f.name}'])) as "${f.name}" `
+                : (f.cast? ` ${f.cast}(d['${f.name}']) as "${f.name}" `
+                   :` CAST(d['${f.name}'], '${f.type}') as "${f.name}" `
+                )
+        ));
         if (withFields.length) withSentence="WITH "+withFields.join(", \n")
         const queries = [
             `CREATE TABLE IF NOT EXISTS ${database}."kafka_${tablesSuffix}" ("msg" String ) ENGINE = Kafka SETTINGS \
@@ -245,14 +251,13 @@ class CLickHouseDDL {
             +` select \
                 CAST(JSONExtractKeysAndValues("msg",'String'),'Map(String, String)') as d, \
                 _topic as "topic", _offset as "offset", _timestamp as "timestamp", \n`+
-            fields.map(f=> ((!f.isArray && !f.isMap ? ` CAST(d['${f.name}'], 'Nullable(${f.type})') as `:"")+`"${f.name}" `)
-                // (f.isArray ?
-                //     ` arrayMap(s -> JSONExtract(s, '${f.items}'), JSONExtractArrayRaw(d['${f.name}'])) as "${f.name}" `:
-                //         (f.isMap ? ` CAST(d['${f.name}'], '${f.type}') as "${f.name}" `
-                //             : ` CAST(d['${f.name}'], 'Nullable(${f.type})') as "${f.name}" `)
-                // )
-// arrayMap(s -> JSONExtract(s,'Tuple("typeCode" String , "text" String , "code" String , "pregnancyTerm" Int32 , "pregnancyTermUnit" String )'),
-//     JSONExtractArrayRaw(d['REFDGN'])) as "REFDGN" ,
+            fields.map(f=> (
+                (!f.isArray && !f.isMap ?
+                    (f.cast? ` ${f.cast}(d['${f.name}']) as  `
+                            :` CAST(d['${f.name}'], 'Nullable(${f.type})') as `
+                    )
+                    :"")
+                +`"${f.name}" `)
             ).join(", \n")+
             `\n FROM ${database}."kafka_${tablesSuffix}";`
         ];
